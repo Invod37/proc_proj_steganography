@@ -38,6 +38,13 @@ The goal is to study basic information security methods and show how data can be
   ./steg decode encoded.bmp output.txt
 ```
 
+
+### Structure
+<img width="698" height="1280" alt="image" src="https://github.com/user-attachments/assets/5133036c-1ab3-4867-83fd-e15510cec860" />
+
+
+
+
 ## Third-Party Libraries
 <stdio.h> — file reading/writing.
 <stdlib.h> — memory management.
