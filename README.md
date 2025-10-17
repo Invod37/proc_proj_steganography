@@ -28,15 +28,15 @@ The goal is to study basic information security methods and show how data can be
 ### Main & Tests (`main.c`, `tests/tests.c`)
 **Purpose:** coordinates program execution, processes arguments, and performs testing.  
 **Functionality:**  
-• Handles errors and validates arguments.
-• Calls the functions encode() and decode().
-• Contains unit tests for functionality verification.
-• Includes a Makefile for automated build and testing.
-• Provides a command-line interface (CLI):  
+- Handles errors and validates arguments.  
+- Calls the functions `encode()` and `decode()`.  
+- Contains unit tests for functionality verification.  
+- Includes a Makefile for automated build and testing.  
+- Provides a command-line interface (CLI):  
   ```bash
   ./steg encode input.bmp message.txt encoded.bmp  
   ./steg decode encoded.bmp output.txt
-```
+
 
 
 ### Structure
@@ -46,11 +46,13 @@ The goal is to study basic information security methods and show how data can be
 
 
 ## Third-Party Libraries
-<stdio.h> — file reading/writing.
-<stdlib.h> — memory management.
-<string.h> — string operations.
-<stdint.h> — precise byte/bit-level types.
-Optionally, <assert.h> may be used for simple tests.
+
+- `<stdio.h>` — file reading/writing.  
+- `<stdlib.h>` — memory management.  
+- `<string.h>` — string operations.  
+- `<stdint.h>` — precise byte/bit-level types.  
+- *(Optional)* `<assert.h>` — for simple tests.  
+
 
 
 ## Team Members
