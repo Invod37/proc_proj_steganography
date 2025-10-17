@@ -51,7 +51,7 @@ The goal is to study basic information security methods and show how data can be
 - `<stdlib.h>` — memory management.  
 - `<string.h>` — string operations.  
 - `<stdint.h>` — precise byte/bit-level types.  
-- *(Optional)* `<assert.h>` — for simple tests.  
+- `<assert.h>` — for simple tests.  
 
 
 
