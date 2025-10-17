@@ -38,6 +38,13 @@ The goal is to study basic information security methods and show how data can be
   ./steg decode encoded.bmp output.txt
 ```
 
+## Third-Party Libraries
+<stdio.h> — file reading/writing.
+<stdlib.h> — memory management.
+<string.h> — string operations.
+<stdint.h> — precise byte/bit-level types.
+Optionally, <assert.h> may be used for simple tests.
+
 
 ## Team Members
 - Dudinov Oleh
