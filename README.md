@@ -7,6 +7,7 @@ Steganography in BMP
 This project is written in C and demonstrates the concept of steganography.  
 The program allows hiding a text message inside a BMP image and then extracting it back.  
 The goal is to study basic information security methods and show how data can be concealed within digital media.
+Implement the project entirely in pure C, without any external libraries (only standard ones).
 
 ## Project Modules
 ### Encoder (`steg_encode.c`)
