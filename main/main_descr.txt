@@ -1,0 +1,43 @@
+1. About the program.
+
+Before calling the encoding function, the program checks the availability of the input file 
+and the message file, the input file's compliance with the BMP format features, the image 
+color depth, and the size of the encoded message.
+Ideally, the message size in bytes, assuming one byte per character, should not be more 
+than 1/8 of the size of a full-color (24 bits per pixel) image.
+
+Before calling the decoding function, the program checks the availability of the input file 
+and its compliance with the BMP format characteristics.
+
+Stub functions(steg_encode and steg_decode) were used to simulate the program's operation.
+
+CLI based on getopt() and have a standard behavior defined by the POSIX and GNU standards for
+handling command-line arguments.
+
+
+2. Description of options and call format.
+
+stegtool.exe -h | --help                                                             
+stegtool.exe -v | --version                                                          
+
+Short and long variants of options can be used.
+
+To encode:
+stegtool.exe -e -i <input_bmp_file_name> -t <msg_text_file_name> -o <output_bmp_file_name>                        
+ or
+stegtool.exe --encode --input=<input_bmp_file_name> --text=<msg_text_file_name> --output=<output_bmp_file_name>                        
+
+To decode:
+stegtool.exe -d -i <input_bmp_file_name> -t <decoded_text_file_name>   
+ or
+stegtool.exe --decode --input=<input_bmp_file_name> --text=<decoded_text_file_name>   
+
+Using mixed options type are possible, like this:
+stegtool.exe -e --input=<input_bmp_file_name> -t <msg_text_file_name> --output=<output_bmp_file_name> 
+
+sample: stegtool.exe -e --input=image.bmp -t msg.txt --output=output.bmp
+
+
+3. Testing.
+
+Integration testing using Python is available for this version of the program.
