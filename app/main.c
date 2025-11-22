@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "../lib/include/steg_encode.h"
+#include "../lib/include/steg_decode.h"
 #include "../lib/include/bmp_utils.h"
 
 static char *read_text_file(const char *path, size_t *out_len) {
@@ -20,8 +21,43 @@ static char *read_text_file(const char *path, size_t *out_len) {
     if (out_len) *out_len = n;
     return buf;
 }
-
 int main(int argc, char **argv) {
+      if (argc > 1 && strcmp(argv[1], "decode") == 0) {
+        const char *in_bmp = argc > 2 ? argv[2] : "data/encoded.bmp";
+        const char *out_txt = argc > 3 ? argv[3] : "data/decoded.txt";
+
+        BmpImage img = {0};
+        if (bmp_read(in_bmp, &img) != 0) {
+            fprintf(stderr, "Error: failed to read BMP '%s'\n", in_bmp);
+            return 1;
+        }
+
+        unsigned char *message = NULL;
+        size_t msg_len = 0;
+        
+        int rc = steg_decode_message(&img, &message, &msg_len);
+        bmp_free(&img);
+        
+        if (rc != 0) {
+            fprintf(stderr, "Error: failed to decode message from '%s'\n", in_bmp);
+            return 1;
+        }
+
+        FILE *f = fopen(out_txt, "wb");
+        if (!f) {
+            fprintf(stderr, "Error: failed to open output file '%s'\n", out_txt);
+            free(message);
+            return 1;
+        }
+
+        fwrite(message, 1, msg_len, f);
+        fclose(f);
+        free(message);
+
+        printf("Decoded message from '%s' -> '%s' (%zu bytes)\n", in_bmp, out_txt, msg_len);
+        return 0;
+    }
+
     const char *in_bmp = argc > 1 ? argv[1] : "data/input.bmp";
     const char *msg_txt = argc > 2 ? argv[2] : "data/message.txt";
     const char *out_bmp = argc > 3 ? argv[3] : "data/encoded.bmp";
