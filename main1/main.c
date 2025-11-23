@@ -6,33 +6,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "steg_encode.h"
-#include "steg_decode.h"
-
-
-// BMP File Header (14 bytes)
-typedef struct {
-    uint16_t bfType;       // Specifies the file type, must be "BM" (0x4D42)
-    uint32_t bfSize;       // Specifies the size of the file in bytes
-    uint16_t bfReserved1;  // Reserved, must be 0
-    uint16_t bfReserved2;  // Reserved, must be 0
-    uint32_t bfOffBits;    // Specifies the offset to the bitmap data
-} __attribute__((__packed__)) BMPFILEHEADER;
-
-// BMP Image Information Header (40 bytes for BITMAPINFOHEADER)
-typedef struct {
-    uint32_t biSize;           // Specifies the size of the structure in bytes
-    int32_t  biWidth;          // Specifies the width of the image in pixels
-    int32_t  biHeight;         // Specifies the height of the image in pixels
-    uint16_t biPlanes;         // Specifies the number of planes, must be 1
-    uint16_t biBitCount;       // Specifies the number of bits per pixel
-    uint32_t biCompression;    // Specifies the type of compression
-    uint32_t biSizeImage;      // Specifies the size of the image data in bytes
-    int32_t  biXPelsPerMeter;  // Specifies the horizontal resolution in pixels per meter
-    int32_t  biYPelsPerMeter;  // Specifies the vertical resolution in pixels per meter
-    uint32_t biClrUsed;        // Specifies the number of colors used in the image
-    uint32_t biClrImportant;   // Specifies the number of important colors
-} __attribute__((__packed__)) BMPINFOHEADER;
+#include "src/steg_encode.h"
+#include "src/steg_decode.h"
+#include "src/bmp_utils.h"
 
 
 void print_usage(const char *prog_name) {
@@ -53,7 +29,7 @@ int main(int argc, char *argv[]) {
     char *output_bmp_path = NULL;
     char *msg_file_path = NULL;
 
-    
+
     struct option long_options[] = {
         {"help",    no_argument,       0, 'h'},
         {"version", no_argument,       0, 'v'},
@@ -83,7 +59,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    
+
     if (help_flag) {
         print_usage(argv[0]);
         return 0;
@@ -94,14 +70,13 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    
+
     if ((encode && decode) || (!encode && !decode)) {
         fprintf(stderr, "Error: Must specify exactly one mode: -e (encode) or -d (decode).\n");
         print_usage(argv[0]);
         return 1;
     }
 
-    
     if (encode) {
         if (!input_bmp_path || !msg_file_path || !output_bmp_path) {
             fprintf(stderr, "Error: Encode mode requires -i, -t, and -o arguments.\n");
@@ -115,7 +90,7 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "Error: Decode mode requires -i and -t arguments.\n");
             return 1;
         }
-
+        
         if (output_bmp_path) {
             printf("Warning: Output file (-o) is ignored in decode mode based on strict rules.\n");
         }
@@ -145,8 +120,8 @@ int main(int argc, char *argv[]) {
 
     
     FILE *file;
-    BMPFILEHEADER fileHeader;
-    BMPINFOHEADER infoHeader;
+    BmpFileHeader fileHeader;
+    BmpInfoHeader infoHeader;
 
     
     file = fopen(input_bmp_path, "rb"); 
@@ -156,14 +131,14 @@ int main(int argc, char *argv[]) {
     }
 
     
-    if (fread(&fileHeader, sizeof(BMPFILEHEADER), 1, file) != 1) {
+    if (fread(&fileHeader, sizeof(BmpFileHeader), 1, file) != 1) {
         fprintf(stderr, "Error reading BMP File Header\n");
         fclose(file);
         return 1;
     }
 
     
-    if (fread(&infoHeader, sizeof(BMPINFOHEADER), 1, file) != 1) {
+    if (fread(&infoHeader, sizeof(BmpInfoHeader), 1, file) != 1) {
         fprintf(stderr, "Error reading BMP Info Header\n");
         fclose(file);
         return 1;
@@ -198,13 +173,14 @@ int main(int argc, char *argv[]) {
     }
 
     
+    int fresult;
     if (encode) {
-        steg_encode(input_bmp_path, msg_file_path, output_bmp_path); 
+        fresult = steg_encode(input_bmp_path, msg_file_path, output_bmp_path); 
     }
 
     if (decode) {
-        steg_decode(input_bmp_path, msg_file_path);
+        fresult = steg_decode(input_bmp_path, msg_file_path);
     }
 
-    return 0;
+    return fresult;
 }
