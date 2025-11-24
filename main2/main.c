@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "Error: Decode mode requires -i and -t arguments.\n");
             return 1;
         }
-        // Согласно заданию, комбинация для decode не требует output_bmp, поэтому предупредим, если он есть
+        
         if (output_bmp_path) {
             printf("Warning: Output file (-o) is ignored in decode mode based on strict rules.\n");
         }
